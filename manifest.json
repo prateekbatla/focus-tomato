@@ -1,0 +1,42 @@
+{
+  "manifest_version": 3,
+  "name": "Focus Tomato - Pomodoro + To-Do",
+  "version": "1.0.0",
+  "description": "A simple, private Pomodoro timer with a built-in to-do list, ambient focus sounds, and YouTube background audio. No tracking, works offline.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Focus Tomato",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "options_page": "options.html",
+  "permissions": ["alarms", "notifications", "storage", "offscreen"],
+  "host_permissions": ["https://www.youtube.com/*"],
+  "commands": {
+    "start-timer": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+S",
+        "mac": "Command+Ctrl+S"
+      },
+      "description": "Start / resume the timer"
+    },
+    "stop-timer": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+D",
+        "mac": "Command+Ctrl+D"
+      },
+      "description": "Pause / stop the timer"
+    }
+  }
+}

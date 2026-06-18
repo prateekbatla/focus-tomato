@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <span class="brand">🍅 Focus Tomato</span>
+      <span class="daily" id="daily" title="Focus sessions completed today">🍅 0 today</span>
+    </header>
+
+    <nav class="modes" role="tablist" aria-label="Timer mode">
+      <button class="mode" data-mode="focus" role="tab" aria-selected="true">Focus</button>
+      <button class="mode" data-mode="short" role="tab" aria-selected="false">Short</button>
+      <button class="mode" data-mode="long" role="tab" aria-selected="false">Long</button>
+    </nav>
+
+    <div class="timer" id="timer" aria-live="polite">25:00</div>
+
+    <div class="controls">
+      <button class="btn primary" id="startPause">Start</button>
+      <button class="btn" id="reset">Reset</button>
+      <button class="btn" id="skip" title="Skip to next session">Skip</button>
+    </div>
+
+    <section class="sound">
+      <label class="row">
+        <span>Focus sound</span>
+        <select id="sound" aria-label="Focus sound">
+          <option value="ocean">Ocean waves</option>
+          <option value="tick">Clock tick</option>
+          <option value="youtube">YouTube link</option>
+          <option value="off">Off</option>
+        </select>
+      </label>
+      <input
+        type="text"
+        id="youtubeUrl"
+        class="yt hidden"
+        placeholder="Paste a YouTube link"
+        aria-label="YouTube link"
+      />
+      <label class="row volrow">
+        <span>Volume</span>
+        <input type="range" id="volume" min="0" max="100" step="1" aria-label="Volume" />
+      </label>
+    </section>
+
+    <section class="todo">
+      <div class="todo-head">
+        <span>This cycle</span>
+        <span class="todo-count" id="todoCount"></span>
+      </div>
+      <form id="todoForm" class="todo-add">
+        <input
+          type="text"
+          id="todoInput"
+          placeholder="Add a task…"
+          maxlength="120"
+          aria-label="Add a task"
+        />
+        <button class="btn small" type="submit" aria-label="Add task">＋</button>
+      </form>
+      <ul class="todo-list" id="todoList"></ul>
+    </section>
+
+    <footer class="foot">
+      <button class="link" id="openOptions">Settings</button>
+      <span class="hint">⌘⌃S start · ⌘⌃D pause</span>
+    </footer>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

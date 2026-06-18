@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Focus Tomato - Settings</title>
+    <link rel="stylesheet" href="popup.css" />
+    <style>
+      body {
+        width: 420px;
+      }
+      h1 {
+        font-size: 18px;
+        margin: 4px 0 16px;
+      }
+      .field {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: var(--panel);
+        border-radius: 9px;
+        padding: 11px 13px;
+        margin-bottom: 9px;
+        font-size: 13px;
+      }
+      .field input[type="number"] {
+        width: 70px;
+        background: var(--panel-2);
+        color: var(--text);
+        border: 1px solid var(--border);
+        border-radius: 7px;
+        padding: 6px 8px;
+        font-size: 13px;
+      }
+      .field input[type="checkbox"] {
+        width: 17px;
+        height: 17px;
+        accent-color: var(--focus);
+      }
+      .save {
+        margin-top: 8px;
+        width: 100%;
+      }
+      .saved {
+        text-align: center;
+        font-size: 12px;
+        color: var(--short);
+        height: 16px;
+        margin-top: 8px;
+      }
+      .note {
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 14px;
+        line-height: 1.5;
+      }
+      .note a {
+        color: var(--long);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🍅 Focus Tomato settings</h1>
+
+    <div class="field">
+      <span>Focus length (minutes)</span>
+      <input type="number" id="focusMin" min="1" max="180" />
+    </div>
+    <div class="field">
+      <span>Short break (minutes)</span>
+      <input type="number" id="shortMin" min="1" max="60" />
+    </div>
+    <div class="field">
+      <span>Long break (minutes)</span>
+      <input type="number" id="longMin" min="1" max="120" />
+    </div>
+    <div class="field">
+      <span>Long break after N focus sessions</span>
+      <input type="number" id="longEvery" min="1" max="12" />
+    </div>
+    <div class="field">
+      <span>Auto-start the next session</span>
+      <input type="checkbox" id="autoStart" />
+    </div>
+    <div class="field">
+      <span>Default focus sound</span>
+      <select id="defaultSound">
+        <option value="ocean">Ocean waves</option>
+        <option value="tick">Clock tick</option>
+        <option value="youtube">YouTube link</option>
+        <option value="off">Off</option>
+      </select>
+    </div>
+    <div class="field">
+      <span>Default volume</span>
+      <input type="range" id="volume" min="0" max="100" />
+    </div>
+
+    <button class="btn primary save" id="save">Save settings</button>
+    <div class="saved" id="saved"></div>
+
+    <p class="note">
+      Keyboard shortcuts can be changed at
+      <a href="#" id="shortcuts">chrome://extensions/shortcuts</a>. On macOS,
+      Ctrl+Cmd+D may be reserved by the system; rebind it there if it does not
+      work. This extension stores everything locally and collects no data.
+    </p>
+
+    <script src="options.js"></script>
+  </body>
+</html>
