@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Focus Tomato - Pomodoro + To-Do",
   "version": "1.0.0",
-  "description": "A simple, private Pomodoro timer with a built-in to-do list, ambient focus sounds, and YouTube background audio. No tracking, works offline.",
+  "description": "Private Pomodoro timer with a built-in to-do list, focus sounds, and YouTube audio. No tracking, works offline.",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
