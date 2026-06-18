@@ -139,11 +139,24 @@ function wire() {
     const sound = $('sound').value;
     $('youtubeUrl').classList.toggle('hidden', sound !== 'youtube');
     send({ cmd: 'setSound', sound, youtubeUrl: $('youtubeUrl').value });
+    if (sound === 'youtube') $('youtubeUrl').focus();
   });
 
-  $('youtubeUrl').addEventListener('change', () => {
-    send({ cmd: 'setSound', sound: 'youtube', youtubeUrl: $('youtubeUrl').value });
+  // Register the link as you type/paste (debounced) so you don't have to click
+  // out of the field before starting.
+  let ytTimer = null;
+  const applyYouTube = async () => {
+    const url = $('youtubeUrl').value;
+    const resp = await send({ cmd: 'setSound', sound: 'youtube', youtubeUrl: url });
+    const ok = !url.trim() || (resp && resp.youtubeId);
+    $('youtubeUrl').style.borderColor = ok ? '' : 'var(--focus)';
+    $('youtubeUrl').title = ok ? '' : "Couldn't read a video ID from that link";
+  };
+  $('youtubeUrl').addEventListener('input', () => {
+    clearTimeout(ytTimer);
+    ytTimer = setTimeout(applyYouTube, 600);
   });
+  $('youtubeUrl').addEventListener('change', applyYouTube);
 
   let volTimer = null;
   $('volume').addEventListener('input', () => {
