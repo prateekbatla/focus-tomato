@@ -30,7 +30,10 @@
         <span>Focus sound</span>
         <select id="sound" aria-label="Focus sound">
           <option value="ocean">Ocean waves</option>
-          <option value="tick">Clock tick</option>
+          <option value="clock-soft">Clock - soft tick</option>
+          <option value="clock-wall">Clock - wall clock</option>
+          <option value="clock-mech">Clock - mechanical</option>
+          <option value="rain">Rain</option>
           <option value="youtube">YouTube link</option>
           <option value="off">Off</option>
         </select>
@@ -42,6 +45,7 @@
         placeholder="Paste a YouTube link"
         aria-label="YouTube link"
       />
+      <div class="yt-status hidden" id="ytStatus" aria-live="polite"></div>
       <label class="row volrow">
         <span>Volume</span>
         <input type="range" id="volume" min="0" max="100" step="1" aria-label="Volume" />

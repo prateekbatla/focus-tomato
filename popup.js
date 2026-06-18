@@ -42,7 +42,26 @@ function renderControls() {
   $('startPause').textContent = state.running ? 'Pause' : 'Start';
   $('sound').value = state.sound;
   $('youtubeUrl').value = state.youtubeUrl || '';
-  $('youtubeUrl').classList.toggle('hidden', state.sound !== 'youtube');
+  const isYt = state.sound === 'youtube';
+  $('youtubeUrl').classList.toggle('hidden', !isYt);
+  showYtHint();
+}
+
+// YouTube plays in a minimized mini-window (Chrome blocks hidden autoplay with
+// sound). Show a hint, and flag links we can't read a video ID from.
+function showYtHint(badLink) {
+  const el = $('ytStatus');
+  if ($('sound').value !== 'youtube') {
+    el.classList.add('hidden');
+    return;
+  }
+  if (badLink) {
+    el.textContent = "⚠ Couldn't read a video ID from that link";
+    el.className = 'yt-status err';
+  } else {
+    el.textContent = 'Plays in a minimized window when focus starts.';
+    el.className = 'yt-status';
+  }
 }
 
 function renderAll() {
@@ -139,6 +158,7 @@ function wire() {
     const sound = $('sound').value;
     $('youtubeUrl').classList.toggle('hidden', sound !== 'youtube');
     send({ cmd: 'setSound', sound, youtubeUrl: $('youtubeUrl').value });
+    showYtHint();
     if (sound === 'youtube') $('youtubeUrl').focus();
   });
 
@@ -148,9 +168,8 @@ function wire() {
   const applyYouTube = async () => {
     const url = $('youtubeUrl').value;
     const resp = await send({ cmd: 'setSound', sound: 'youtube', youtubeUrl: url });
-    const ok = !url.trim() || (resp && resp.youtubeId);
-    $('youtubeUrl').style.borderColor = ok ? '' : 'var(--focus)';
-    $('youtubeUrl').title = ok ? '' : "Couldn't read a video ID from that link";
+    const badLink = url.trim() && !(resp && resp.youtubeId);
+    showYtHint(badLink);
   };
   $('youtubeUrl').addEventListener('input', () => {
     clearTimeout(ytTimer);

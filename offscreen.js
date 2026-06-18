@@ -1,15 +1,11 @@
 // Focus Tomato - offscreen audio host.
-// Plays bundled ambient loops + chime, and drives a hidden YouTube embed.
+// Plays the bundled ambient loops + the session-end chime. (YouTube is handled
+// by the background script via a separate mini-player window.)
 
-const ocean = document.getElementById('ocean');
-const tick = document.getElementById('tick');
+const LOOP_IDS = ['ocean', 'clock-soft', 'clock-wall', 'clock-mech', 'rain'];
+const loops = {};
+for (const id of LOOP_IDS) loops[id] = document.getElementById(id);
 const chime = document.getElementById('chime');
-const yt = document.getElementById('yt');
-
-const loops = { ocean, tick };
-let currentYouTubeId = null;
-let pendingVolume = 70;
-let ytNudge = null;
 
 function vol(v) {
   return Math.min(1, Math.max(0, (v ?? 70) / 100));
@@ -22,54 +18,8 @@ function stopLoops() {
   }
 }
 
-function ytCommand(func, args = []) {
-  yt.contentWindow?.postMessage(
-    JSON.stringify({ event: 'command', func, args }),
-    '*'
-  );
-}
-
-function stopYouTube() {
-  clearInterval(ytNudge);
-  // about:blank is the most reliable way to fully silence the embed.
-  yt.src = 'about:blank';
-  currentYouTubeId = null;
-}
-
-function playYouTube(id, volume) {
-  if (volume != null) pendingVolume = volume;
-  if (!id) return;
-
-  if (id !== currentYouTubeId) {
-    currentYouTubeId = id;
-    // Start muted: muted autoplay is always allowed by the browser. We unmute
-    // via the IFrame API once it's actually playing. `loop` needs playlist=id.
-    const origin = encodeURIComponent(location.origin);
-    yt.src =
-      `https://www.youtube.com/embed/${id}` +
-      `?enablejsapi=1&autoplay=1&mute=1&loop=1&playlist=${id}` +
-      `&controls=0&playsinline=1&origin=${origin}`;
-  }
-
-  // The player ignores commands until it has loaded, so nudge it a few times:
-  // play, then unmute and set the real volume.
-  clearInterval(ytNudge);
-  let tries = 0;
-  ytNudge = setInterval(() => {
-    ytCommand('playVideo');
-    ytCommand('unMute');
-    ytCommand('setVolume', [Math.round(vol(pendingVolume) * 100)]);
-    if (++tries >= 6) clearInterval(ytNudge);
-  }, 800);
-}
-
 function play(msg) {
   stopLoops();
-  if (msg.sound === 'youtube') {
-    playYouTube(msg.youtubeId, msg.volume);
-    return;
-  }
-  stopYouTube();
   const a = loops[msg.sound];
   if (a) {
     a.volume = vol(msg.volume);
@@ -77,17 +27,8 @@ function play(msg) {
   }
 }
 
-function stopAll() {
-  stopLoops();
-  ytCommand('pauseVideo');
-  stopYouTube();
-}
-
 function setVolume(v) {
-  pendingVolume = v;
   for (const a of Object.values(loops)) a.volume = vol(v);
-  ytCommand('unMute');
-  ytCommand('setVolume', [Math.round(vol(v) * 100)]);
 }
 
 function playChime(v) {
@@ -103,7 +44,7 @@ chrome.runtime.onMessage.addListener((msg) => {
       play(msg);
       break;
     case 'stop':
-      stopAll();
+      stopLoops();
       break;
     case 'volume':
       setVolume(msg.volume);

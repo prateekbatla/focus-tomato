@@ -99,19 +99,62 @@ async function audio(msg) {
 
 async function startAmbient(state, settings) {
   if (state.mode !== 'focus' || state.sound === 'off') {
-    audio({ type: 'stop' });
+    await stopAmbient();
     return;
   }
-  audio({
-    type: 'play',
-    sound: state.sound,
-    youtubeId: state.youtubeId,
-    volume: settings.volume,
-  });
+  if (state.sound === 'youtube') {
+    audio({ type: 'stop' }); // no bundled loop
+    const id = state.youtubeId || parseYouTubeId(state.youtubeUrl);
+    await openYtWindow(id);
+    return;
+  }
+  await closeYtWindow();
+  audio({ type: 'play', sound: state.sound, volume: settings.volume });
 }
 
-function stopAmbient() {
+async function stopAmbient() {
   audio({ type: 'stop' });
+  await closeYtWindow();
+}
+
+// ---------- youtube mini-player window ----------
+// Hidden in-page YouTube audio is blocked by Chrome's autoplay policy, so we
+// open the video in a minimized popup window (YouTube itself is allowed to
+// autoplay), and close it when focus stops.
+
+async function openYtWindow(id) {
+  await closeYtWindow();
+  if (!id) {
+    console.warn('[FocusTomato] No YouTube video ID - paste a watch?v=… link');
+    return;
+  }
+  // A normal watch page autoplays reliably (YouTube is a trusted origin). We
+  // open it focused so it gets activation, then minimize it out of the way.
+  const url = `https://www.youtube.com/watch?v=${id}`;
+  try {
+    const win = await chrome.windows.create({
+      url,
+      type: 'popup',
+      width: 480,
+      height: 360,
+      focused: true,
+    });
+    await chrome.storage.local.set({ ytWindowId: win.id });
+    setTimeout(() => {
+      chrome.windows.update(win.id, { state: 'minimized' }).catch(() => {});
+    }, 1800);
+    console.log('[FocusTomato] Opened YouTube window', win.id, url);
+  } catch (e) {
+    console.error('[FocusTomato] Failed to open YouTube window:', e);
+  }
+}
+
+async function closeYtWindow() {
+  const { ytWindowId } = await chrome.storage.local.get('ytWindowId');
+  if (ytWindowId != null) {
+    await chrome.windows.remove(ytWindowId).catch(() => {});
+    await chrome.storage.local.remove('ytWindowId');
+  }
 }
 
 // ---------- badge ----------

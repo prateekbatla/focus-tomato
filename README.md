@@ -12,7 +12,7 @@ No accounts. No tracking. Works offline (except YouTube playback).
 - **Three modes:** Focus, Short break, Long break, with configurable lengths.
 - **Runs in the background:** the timer keeps counting even when the popup is closed, and shows the minutes remaining right on the toolbar icon.
 - **Notification + chime** at the end of every session, with quick **Start break / Skip** buttons.
-- **Focus sounds:** built-in **ocean waves** and **clock tick** (offline), or paste a **YouTube link** to play any ambience/lofi stream in the background.
+- **Focus sounds:** five built-in loops (offline) - **ocean waves**, **soft clock tick**, **wall clock**, **mechanical clock**, and **rain** - or paste a **YouTube link** to play any ambience/lofi video.
 - **Built-in to-do list:** jot down what you want to get done this cycle and check items off. Tasks persist across restarts.
 - **Daily count:** a small "🍅 N today" tracker for motivation.
 - **Keyboard shortcuts:** start/pause without opening the popup.
@@ -35,7 +35,7 @@ _(Coming soon - link will go here once published.)_
 ## Usage
 
 - Click the 🍅 icon, pick a mode, and hit **Start**.
-- Choose a **Focus sound** from the dropdown. For YouTube, paste any link (e.g. an ocean-ambience or lofi live stream); it plays hidden in the background.
+- Choose a **Focus sound** from the dropdown. For YouTube, paste any link (e.g. an ocean-ambience or lofi video); it opens in a minimized mini-window when focus starts and closes when focus stops.
 - Add tasks in **This cycle** and check them off as you go.
 - Adjust durations, the long-break interval, auto-start, and default sound under **Settings**.
 
@@ -50,7 +50,7 @@ Rebind them at `chrome://extensions/shortcuts`. Note: on some macOS setups `Ctrl
 
 ## Notes on YouTube audio
 
-YouTube playback is an embedded player, so it needs an internet connection and **may show ads** unless you have YouTube Premium. The built-in ocean and clock-tick sounds always work offline with no ads.
+Chrome blocks hidden players from auto-starting audio, so a YouTube link opens in a **minimized popup window** (which Chrome does allow to play) and closes automatically when focus ends. It needs an internet connection and **may show ads** unless you have YouTube Premium. The five built-in sounds always work offline, hidden, with no ads.
 
 ## Privacy
 

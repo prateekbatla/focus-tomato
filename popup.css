@@ -170,6 +170,20 @@ input[type="range"] {
   accent-color: var(--accent);
 }
 
+.yt-status {
+  font-size: 11px;
+  margin-top: 6px;
+  color: var(--muted);
+}
+
+.yt-status.err {
+  color: var(--focus);
+}
+
+.yt-status.ok {
+  color: var(--short);
+}
+
 .todo {
   background: var(--panel);
   border-radius: 10px;

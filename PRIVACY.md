@@ -20,7 +20,7 @@ Settings may sync across your own devices if you are signed into Chrome with syn
 
 ## External connections
 
-The only external connection happens when **you** choose a **YouTube link** as your focus sound. In that case the extension loads YouTube's standard embedded player to play your chosen video. This connection is governed by [Google's Privacy Policy](https://policies.google.com/privacy). If you use the built-in ocean or clock-tick sounds, no external connection is made.
+The only external connection happens when **you** choose a **YouTube link** as your focus sound. In that case the extension opens your chosen video in a minimized browser window to play its audio. This connection is governed by [Google's Privacy Policy](https://policies.google.com/privacy). If you use the built-in sounds, no external connection is made.
 
 ## Permissions
 
@@ -28,7 +28,6 @@ The only external connection happens when **you** choose a **YouTube link** as y
 - `notifications` - alert you when a session ends.
 - `storage` - save your settings, tasks, and timer state locally.
 - `offscreen` - play audio (service workers cannot play sound directly).
-- access to `youtube.com` - only to embed the player when you pick a YouTube sound.
 
 ## Contact
 
